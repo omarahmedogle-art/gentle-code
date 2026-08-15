@@ -64,7 +64,7 @@ export function TaskDialog({
 
   async function patch(values: Partial<Task>) {
     const { error } = await supabase.from("tasks").update(values).eq("id", task!.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     refreshTasks();
   }
 
