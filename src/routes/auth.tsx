@@ -80,6 +80,36 @@ function AuthPage() {
     navigate({ to: "/dashboard" });
   }
 
+  async function demo() {
+    const email = "demo@vistrao.app";
+    const password = "vistrao-demo-2026";
+    setBusy(true);
+    let { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      const signUpResult = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: "Demo User" } },
+      });
+      if (signUpResult.error) {
+        setBusy(false);
+        toast.error(signUpResult.error.message);
+        return;
+      }
+      if (!signUpResult.data.session) {
+        ({ error } = await supabase.auth.signInWithPassword({ email, password }));
+        if (error) {
+          setBusy(false);
+          toast.error(error.message);
+          return;
+        }
+      }
+    }
+    setBusy(false);
+    toast.success("Signed in to the demo workspace");
+    navigate({ to: "/dashboard", replace: true });
+  }
+
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="hidden flex-col justify-between bg-gradient-brand p-12 text-white lg:flex">
