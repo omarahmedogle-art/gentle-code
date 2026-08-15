@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ProjectsProjectIdAnalyticsRouteImport } from './routes/projects.$projectId.analytics'
 import { Route as ProjectsProjectIdBoardRouteImport } from './routes/projects.$projectId.board'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,12 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjectsProjectIdAnalyticsRoute =
+  ProjectsProjectIdAnalyticsRouteImport.update({
+    id: '/projects/$projectId/analytics',
+    path: '/projects/$projectId/analytics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ProjectsProjectIdBoardRoute = ProjectsProjectIdBoardRouteImport.update({
   id: '/projects/$projectId/board',
   path: '/projects/$projectId/board',
@@ -46,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +61,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects': typeof ProjectsIndexRoute
+  '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
 }
 export interface FileRoutesById {
@@ -61,20 +70,33 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/dashboard' | '/projects/' | '/projects/$projectId/board'
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/projects/'
+    | '/projects/$projectId/analytics'
+    | '/projects/$projectId/board'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/projects' | '/projects/$projectId/board'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/projects'
+    | '/projects/$projectId/analytics'
+    | '/projects/$projectId/board'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/dashboard'
     | '/projects/'
+    | '/projects/$projectId/analytics'
     | '/projects/$projectId/board'
   fileRoutesById: FileRoutesById
 }
@@ -83,6 +105,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ProjectsProjectIdAnalyticsRoute: typeof ProjectsProjectIdAnalyticsRoute
   ProjectsProjectIdBoardRoute: typeof ProjectsProjectIdBoardRoute
 }
 
@@ -116,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projects/$projectId/analytics': {
+      id: '/projects/$projectId/analytics'
+      path: '/projects/$projectId/analytics'
+      fullPath: '/projects/$projectId/analytics'
+      preLoaderRoute: typeof ProjectsProjectIdAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/$projectId/board': {
       id: '/projects/$projectId/board'
       path: '/projects/$projectId/board'
@@ -131,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  ProjectsProjectIdAnalyticsRoute: ProjectsProjectIdAnalyticsRoute,
   ProjectsProjectIdBoardRoute: ProjectsProjectIdBoardRoute,
 }
 export const routeTree = rootRouteImport
