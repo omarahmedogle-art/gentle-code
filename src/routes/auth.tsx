@@ -132,7 +132,11 @@ function AuthPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Welcome to Vistrao</h1>
           <p className="mt-1 text-sm text-muted-foreground">Sign in or create an account to continue.</p>
 
-          <Button variant="outline" className="mt-6 w-full" onClick={google} disabled={busy}>
+          <Button className="mt-6 w-full" onClick={demo} disabled={busy}>
+            {busy && <Loader2 className="mr-2 size-4 animate-spin" />} Explore the demo workspace
+          </Button>
+
+          <Button variant="outline" className="mt-2 w-full" onClick={google} disabled={busy}>
             Continue with Google
           </Button>
 
