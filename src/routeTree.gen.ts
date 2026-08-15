@@ -13,6 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ProjectsProjectIdAnalyticsRouteImport } from './routes/projects.$projectId.analytics'
+import { Route as ProjectsProjectIdBoardRouteImport } from './routes/projects.$projectId.board'
+import { Route as ProjectsProjectIdSettingsRouteImport } from './routes/projects.$projectId.settings'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +37,41 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjectsProjectIdAnalyticsRoute =
+  ProjectsProjectIdAnalyticsRouteImport.update({
+    id: '/projects/$projectId/analytics',
+    path: '/projects/$projectId/analytics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProjectsProjectIdBoardRoute = ProjectsProjectIdBoardRouteImport.update({
+  id: '/projects/$projectId/board',
+  path: '/projects/$projectId/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsProjectIdSettingsRoute =
+  ProjectsProjectIdSettingsRouteImport.update({
+    id: '/projects/$projectId/settings',
+    path: '/projects/$projectId/settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
+  '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
+  '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects': typeof ProjectsIndexRoute
+  '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
+  '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
+  '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +79,38 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
+  '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
+  '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/projects/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/projects/'
+    | '/projects/$projectId/analytics'
+    | '/projects/$projectId/board'
+    | '/projects/$projectId/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/projects'
-  id: '__root__' | '/' | '/auth' | '/dashboard' | '/projects/'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/projects'
+    | '/projects/$projectId/analytics'
+    | '/projects/$projectId/board'
+    | '/projects/$projectId/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/projects/'
+    | '/projects/$projectId/analytics'
+    | '/projects/$projectId/board'
+    | '/projects/$projectId/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +118,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ProjectsProjectIdAnalyticsRoute: typeof ProjectsProjectIdAnalyticsRoute
+  ProjectsProjectIdBoardRoute: typeof ProjectsProjectIdBoardRoute
+  ProjectsProjectIdSettingsRoute: typeof ProjectsProjectIdSettingsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +153,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projects/$projectId/analytics': {
+      id: '/projects/$projectId/analytics'
+      path: '/projects/$projectId/analytics'
+      fullPath: '/projects/$projectId/analytics'
+      preLoaderRoute: typeof ProjectsProjectIdAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/$projectId/board': {
+      id: '/projects/$projectId/board'
+      path: '/projects/$projectId/board'
+      fullPath: '/projects/$projectId/board'
+      preLoaderRoute: typeof ProjectsProjectIdBoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/$projectId/settings': {
+      id: '/projects/$projectId/settings'
+      path: '/projects/$projectId/settings'
+      fullPath: '/projects/$projectId/settings'
+      preLoaderRoute: typeof ProjectsProjectIdSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +182,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  ProjectsProjectIdAnalyticsRoute: ProjectsProjectIdAnalyticsRoute,
+  ProjectsProjectIdBoardRoute: ProjectsProjectIdBoardRoute,
+  ProjectsProjectIdSettingsRoute: ProjectsProjectIdSettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

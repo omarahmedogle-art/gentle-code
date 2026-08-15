@@ -86,7 +86,7 @@ function BoardPage() {
       .from("tasks")
       .update({ column_id: columnId, position: target.length })
       .eq("id", taskId);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     refresh();
   }
 
@@ -99,7 +99,7 @@ function BoardPage() {
       title: title.trim(),
       position: target.length,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setComposerColumn(null);
     refresh();
   }
@@ -111,7 +111,7 @@ function BoardPage() {
       title: newColumn.trim(),
       position: columns.length,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setNewColumn("");
     queryClient.invalidateQueries({ queryKey: ["columns", projectId] });
   }
