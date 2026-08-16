@@ -81,9 +81,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="flex h-full flex-col gap-6 p-4">
       <Link to="/" className="flex items-center gap-2.5 px-2" onClick={onNavigate}>
-        <span className="grid size-8 place-items-center rounded-lg bg-gradient-brand text-sm font-bold text-white">
-          V
-        </span>
+        <img src={vistraoMark} alt="Vistrao logo" width={32} height={32} className="size-8 object-contain" />
         <span className="text-lg font-semibold tracking-tight">Vistrao</span>
       </Link>
 
