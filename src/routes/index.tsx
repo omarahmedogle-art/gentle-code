@@ -16,6 +16,7 @@ import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import heroDark from "@/assets/hero-dark.jpg";
 import heroLight from "@/assets/hero-light.jpg";
+import vistraoMark from "@/assets/vistrao-mark.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
