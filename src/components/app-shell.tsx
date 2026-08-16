@@ -40,6 +40,7 @@ import { useAuth, initials } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
 import type { Project } from "@/lib/vistrao";
 import { cn } from "@/lib/utils";
+import vistraoMark from "@/assets/vistrao-mark.png";
 
 export function useProjects() {
   const { user } = useAuth();
