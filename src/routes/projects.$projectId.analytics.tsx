@@ -42,12 +42,40 @@ export const Route = createFileRoute("/projects/$projectId/analytics")({
 });
 
 const CHART_COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
 ];
+
+const PRIORITY_COLORS: Record<string, string> = {
+  low: "var(--chart-2)",
+  medium: "var(--chart-3)",
+  high: "var(--chart-4)",
+  urgent: "var(--chart-5)",
+};
+
+const AXIS = "var(--muted-foreground)";
+const GRID = "var(--border)";
+
+const tooltipProps = {
+  cursor: { fill: "var(--muted)", fillOpacity: 0.35 },
+  contentStyle: {
+    background: "var(--popover)",
+    border: "1px solid var(--border)",
+    borderRadius: "0.75rem",
+    color: "var(--popover-foreground)",
+    boxShadow: "var(--shadow-soft)",
+    textTransform: "capitalize" as const,
+  },
+  labelStyle: { color: "var(--popover-foreground)", fontWeight: 600 },
+  itemStyle: { color: "var(--popover-foreground)" },
+};
+
+const legendProps = {
+  wrapperStyle: { fontSize: 12, color: "var(--muted-foreground)", textTransform: "capitalize" as const },
+};
 
 function AnalyticsPage() {
   const { projectId } = Route.useParams();
