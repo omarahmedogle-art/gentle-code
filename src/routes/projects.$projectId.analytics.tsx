@@ -169,13 +169,22 @@ function AnalyticsPage() {
             <CardContent className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={burndown}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="day" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" allowDecimals={false} />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="remaining" stroke={CHART_COLORS[0]} strokeWidth={2} dot={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
+                  <XAxis dataKey="day" tick={{ fontSize: 11, fill: AXIS }} stroke={GRID} />
+                  <YAxis tick={{ fontSize: 11, fill: AXIS }} stroke={GRID} allowDecimals={false} />
+                  <Tooltip {...tooltipProps} />
+                  <Legend {...legendProps} />
                   <Line
                     type="monotone"
+                    name="Remaining"
+                    dataKey="remaining"
+                    stroke={CHART_COLORS[0]}
+                    strokeWidth={2.5}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    name="Ideal"
                     dataKey="ideal"
                     stroke={CHART_COLORS[1]}
                     strokeDasharray="4 4"
@@ -194,11 +203,16 @@ function AnalyticsPage() {
             <CardContent className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={velocity}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="sprint" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="completed" fill={CHART_COLORS[2]} radius={[6, 6, 0, 0]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
+                  <XAxis dataKey="sprint" tick={{ fontSize: 11, fill: AXIS }} stroke={GRID} />
+                  <YAxis tick={{ fontSize: 11, fill: AXIS }} stroke={GRID} allowDecimals={false} />
+                  <Tooltip {...tooltipProps} />
+                  <Legend {...legendProps} />
+                  <Bar name="Completed" dataKey="completed" radius={[6, 6, 0, 0]}>
+                    {velocity.map((entry, index) => (
+                      <Cell key={entry.sprint} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -211,12 +225,22 @@ function AnalyticsPage() {
             <CardContent className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={distribution} dataKey="value" nameKey="name" innerRadius={55} outerRadius={95}>
+                  <Pie
+                    data={distribution}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={55}
+                    outerRadius={95}
+                    paddingAngle={2}
+                    stroke="var(--card)"
+                    strokeWidth={2}
+                  >
                     {distribution.map((entry, index) => (
                       <Cell key={entry.name} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip {...tooltipProps} />
+                  <Legend {...legendProps} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -229,12 +253,21 @@ function AnalyticsPage() {
             <CardContent className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={timeByPriority}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="priority" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip />
-                  <Bar dataKey="estimated" fill={CHART_COLORS[3]} radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="logged" fill={CHART_COLORS[4]} radius={[6, 6, 0, 0]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
+                  <XAxis dataKey="priority" tick={{ fontSize: 11, fill: AXIS }} stroke={GRID} />
+                  <YAxis tick={{ fontSize: 11, fill: AXIS }} stroke={GRID} />
+                  <Tooltip {...tooltipProps} />
+                  <Legend {...legendProps} />
+                  <Bar name="Estimated" dataKey="estimated" radius={[6, 6, 0, 0]} fillOpacity={0.45}>
+                    {timeByPriority.map((entry) => (
+                      <Cell key={entry.priority} fill={PRIORITY_COLORS[entry.priority]} />
+                    ))}
+                  </Bar>
+                  <Bar name="Logged" dataKey="logged" radius={[6, 6, 0, 0]}>
+                    {timeByPriority.map((entry) => (
+                      <Cell key={entry.priority} fill={PRIORITY_COLORS[entry.priority]} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
