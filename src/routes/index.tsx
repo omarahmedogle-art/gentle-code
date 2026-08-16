@@ -175,9 +175,7 @@ function Landing() {
       <footer className="border-t py-10">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 text-sm text-muted-foreground sm:flex-row sm:items-center">
           <div className="flex items-center gap-2.5">
-            <span className="grid size-7 place-items-center rounded-md bg-gradient-brand text-xs font-bold text-white">
-              V
-            </span>
+            <img src={vistraoMark} alt="Vistrao logo" width={28} height={28} loading="lazy" className="size-7 object-contain" />
             <span className="font-medium text-foreground">Vistrao</span>
           </div>
           <p className="sm:ml-auto">© {new Date().getFullYear()} Vistrao. All rights reserved.</p>
