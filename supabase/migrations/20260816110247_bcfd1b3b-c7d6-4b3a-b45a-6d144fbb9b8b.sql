@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.add_owner_membership() FROM PUBLIC, anon, authenticated;
