@@ -16,6 +16,7 @@ import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import heroDark from "@/assets/hero-dark.jpg";
 import heroLight from "@/assets/hero-light.jpg";
+import vistraoMark from "@/assets/vistrao-mark.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,9 +63,7 @@ function Landing() {
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-6">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="grid size-8 place-items-center rounded-lg bg-gradient-brand text-sm font-bold text-white">
-              V
-            </span>
+            <img src={vistraoMark} alt="Vistrao logo" width={32} height={32} className="size-8 object-contain" />
             <span className="text-lg font-semibold tracking-tight">Vistrao</span>
           </Link>
           <nav className="ml-6 hidden gap-6 text-sm text-muted-foreground md:flex">
@@ -176,9 +175,7 @@ function Landing() {
       <footer className="border-t py-10">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 text-sm text-muted-foreground sm:flex-row sm:items-center">
           <div className="flex items-center gap-2.5">
-            <span className="grid size-7 place-items-center rounded-md bg-gradient-brand text-xs font-bold text-white">
-              V
-            </span>
+            <img src={vistraoMark} alt="Vistrao logo" width={28} height={28} loading="lazy" className="size-7 object-contain" />
             <span className="font-medium text-foreground">Vistrao</span>
           </div>
           <p className="sm:ml-auto">© {new Date().getFullYear()} Vistrao. All rights reserved.</p>
