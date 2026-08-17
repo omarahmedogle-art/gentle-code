@@ -103,6 +103,59 @@ export type Database = {
         }
         Relationships: []
       }
+      project_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string
+          project_id: string
+          role: Database["public"]["Enums"]["project_role"]
+          status: Database["public"]["Enums"]["invitation_status"]
+          token: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by: string
+          project_id: string
+          role?: Database["public"]["Enums"]["project_role"]
+          status?: Database["public"]["Enums"]["invitation_status"]
+          token?: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string
+          project_id?: string
+          role?: Database["public"]["Enums"]["project_role"]
+          status?: Database["public"]["Enums"]["invitation_status"]
+          token?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_invitations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_members: {
         Row: {
           created_at: string
@@ -335,6 +388,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_invitation: { Args: { _token: string }; Returns: string }
       can_edit_project: {
         Args: { _project_id: string; _user_id: string }
         Returns: boolean
@@ -342,6 +396,19 @@ export type Database = {
       can_manage_project: {
         Args: { _project_id: string; _user_id: string }
         Returns: boolean
+      }
+      get_invitation: {
+        Args: { _token: string }
+        Returns: {
+          email: string
+          expires_at: string
+          id: string
+          inviter_name: string
+          project_id: string
+          project_name: string
+          role: Database["public"]["Enums"]["project_role"]
+          status: Database["public"]["Enums"]["invitation_status"]
+        }[]
       }
       is_project_member: {
         Args: { _project_id: string; _user_id: string }
@@ -357,6 +424,7 @@ export type Database = {
       }
     }
     Enums: {
+      invitation_status: "pending" | "accepted" | "revoked" | "expired"
       project_role: "owner" | "admin" | "member" | "viewer"
       task_priority: "low" | "medium" | "high" | "urgent"
     }
@@ -486,6 +554,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      invitation_status: ["pending", "accepted", "revoked", "expired"],
       project_role: ["owner", "admin", "member", "viewer"],
       task_priority: ["low", "medium", "high", "urgent"],
     },
