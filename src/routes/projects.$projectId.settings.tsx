@@ -215,6 +215,19 @@ function SettingsPage() {
           </CardContent>
         </Card>
 
+        {manage && (
+          <Card className="surface-panel">
+            <CardHeader>
+              <CardTitle className="text-base">Invitations</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PendingInvitations projectId={projectId} canManage={manage} />
+            </CardContent>
+          </Card>
+        )}
+
+
+
         {isOwner && (
           <Card className="border-destructive/40">
             <CardHeader>
