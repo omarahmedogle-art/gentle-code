@@ -166,10 +166,12 @@ function SettingsPage() {
         </Card>
 
         <Card className="surface-panel">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
             <CardTitle className="text-base">Members</CardTitle>
+            {manage && <InviteMemberDialog projectId={projectId} />}
           </CardHeader>
           <CardContent className="space-y-3">
+
             {members.map((member) => (
               <div key={member.id} className="flex flex-wrap items-center gap-3 rounded-lg border p-3">
                 <Avatar className="h-9 w-9">
