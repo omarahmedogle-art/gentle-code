@@ -9,12 +9,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
-type Search = { token?: string };
+type Search = { token?: string | undefined };
 
 export const Route = createFileRoute("/accept-invite")({
   validateSearch: (search: Record<string, unknown>): Search => ({
     token: typeof search['token'] === "string" ? search['token'] : undefined,
   }),
+
   head: () => ({
     meta: [
       { title: "Accept Invitation — Vistrao" },
