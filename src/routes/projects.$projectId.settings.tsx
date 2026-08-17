@@ -4,7 +4,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
+import { InviteMemberDialog, PendingInvitations } from "@/components/invite-members";
 import { ProjectHeader, useMembers, useMyRole, useProject } from "@/components/project-layout";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -166,10 +168,12 @@ function SettingsPage() {
         </Card>
 
         <Card className="surface-panel">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
             <CardTitle className="text-base">Members</CardTitle>
+            {manage && <InviteMemberDialog projectId={projectId} />}
           </CardHeader>
           <CardContent className="space-y-3">
+
             {members.map((member) => (
               <div key={member.id} className="flex flex-wrap items-center gap-3 rounded-lg border p-3">
                 <Avatar className="h-9 w-9">
@@ -210,6 +214,19 @@ function SettingsPage() {
             ))}
           </CardContent>
         </Card>
+
+        {manage && (
+          <Card className="surface-panel">
+            <CardHeader>
+              <CardTitle className="text-base">Invitations</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PendingInvitations projectId={projectId} canManage={manage} />
+            </CardContent>
+          </Card>
+        )}
+
+
 
         {isOwner && (
           <Card className="border-destructive/40">
