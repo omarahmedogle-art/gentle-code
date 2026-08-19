@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, MessageSquare, Plus, Search } from "lucide-react";
+import { CalendarDays, Lock, MessageSquare, Plus, Search } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -19,8 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { initials } from "@/lib/auth";
-import { canEdit, canManage, PRIORITIES, priorityStyles, type Task } from "@/lib/vistrao";
+import { initials, useAuth } from "@/lib/auth";
+import { canEdit, canManage, canMoveTask, PRIORITIES, priorityStyles, type Task } from "@/lib/vistrao";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/projects/$projectId/board")({
@@ -51,6 +51,7 @@ function BoardPage() {
   const { data: tasks = [] } = useTasks(projectId);
   const { data: members = [] } = useMembers(projectId);
   const role = useMyRole(projectId);
+  const { user } = useAuth();
   const editable = canEdit(role);
 
   const [search, setSearch] = useState("");
