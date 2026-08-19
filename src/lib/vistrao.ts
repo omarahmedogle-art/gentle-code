@@ -36,6 +36,18 @@ export function canManage(role?: ProjectRole | null) {
   return !!role && roleRank[role] >= roleRank.admin;
 }
 
+/** Owners/admins can move any task; members only tasks assigned to them. */
+export function canMoveTask(
+  role: ProjectRole | null | undefined,
+  task: Pick<Task, "assignee_id">,
+  userId?: string | null,
+) {
+  if (canManage(role)) return true;
+  if (!canEdit(role)) return false;
+  return !!userId && task.assignee_id === userId;
+}
+
+
 export function slugify(value: string) {
   return value
     .toLowerCase()
