@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, MessageSquare, Plus, Search } from "lucide-react";
+import { CalendarDays, Lock, MessageSquare, Plus, Search } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -19,8 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { initials } from "@/lib/auth";
-import { canEdit, canManage, PRIORITIES, priorityStyles, type Task } from "@/lib/vistrao";
+import { initials, useAuth } from "@/lib/auth";
+import { canEdit, canManage, canMoveTask, PRIORITIES, priorityStyles, type Task } from "@/lib/vistrao";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/projects/$projectId/board")({
@@ -51,6 +51,7 @@ function BoardPage() {
   const { data: tasks = [] } = useTasks(projectId);
   const { data: members = [] } = useMembers(projectId);
   const role = useMyRole(projectId);
+  const { user } = useAuth();
   const editable = canEdit(role);
 
   const [search, setSearch] = useState("");
@@ -208,22 +209,31 @@ function BoardPage() {
                 <div className="space-y-2">
                   {columnTasks.map((task) => {
                     const person = members.find((m) => m.user_id === task.assignee_id)?.profile;
+                    const movable = canMoveTask(role, task, user?.id);
                     return (
                       <article
                         key={task.id}
-                        draggable={editable}
-                        onDragStart={() => setDragged(task.id)}
+                        draggable={movable}
+                        onDragStart={() => movable && setDragged(task.id)}
                         onClick={() => setOpenTask(task)}
-                        className="cursor-pointer rounded-lg border bg-card p-3 shadow-sm transition-shadow hover:shadow-lift"
+                        title={!movable && editable ? "Only the assignee, admins or owners can move this task" : undefined}
+                        className={cn(
+                          "rounded-lg border bg-card p-3 shadow-sm transition-shadow hover:shadow-lift",
+                          movable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
+                        )}
                       >
                         <div className="flex items-start gap-2">
                           <p className={cn("flex-1 text-sm font-medium", task.completed_at && "line-through opacity-60")}>
                             {task.title}
                           </p>
+                          {!movable && editable && (
+                            <Lock className="mt-0.5 size-3 shrink-0 text-muted-foreground" aria-label="Locked" />
+                          )}
                           <span className={cn("rounded-md border px-1.5 py-0.5 text-[10px] font-medium capitalize", priorityStyles[task.priority])}>
                             {task.priority}
                           </span>
                         </div>
+
                         {task.tags.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
                             {task.tags.map((t) => (
