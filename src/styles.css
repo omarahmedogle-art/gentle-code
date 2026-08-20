@@ -153,6 +153,11 @@
   --gradient-surface: linear-gradient(160deg, oklch(0.23 0.024 284), oklch(0.19 0.02 282));
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.4), 0 8px 24px oklch(0 0 0 / 0.35);
   --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.45), 0 18px 44px oklch(0 0 0 / 0.5);
+
+  --kanban-column: oklch(0.235 0.024 282);
+  --kanban-column-border: oklch(0.31 0.025 282);
+  --kanban-card: oklch(0.305 0.03 282);
+  --kanban-card-border: oklch(0.39 0.03 282);
 }
 
 @theme inline {
