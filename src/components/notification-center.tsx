@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bell, Check, CheckCheck, Dot } from "lucide-react";
+import { Bell, Check, CheckCheck, Undo2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -15,7 +16,9 @@ import { cn } from "@/lib/utils";
 export function NotificationCenter() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const seen = useRef<Set<string>>(new Set());
 
   const { data: notifications = [] } = useQuery({
     queryKey: ["notifications", user?.id],
@@ -24,6 +27,7 @@ export function NotificationCenter() {
       const { data, error } = await supabase
         .from("notifications")
         .select("*")
+        .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
         .limit(50);
       if (error) throw error;
@@ -34,11 +38,20 @@ export function NotificationCenter() {
   useEffect(() => {
     if (!user) return;
     const channel = supabase
-      .channel("notifications-feed")
+      .channel(`notifications-feed-${user.id}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
-        () => queryClient.invalidateQueries({ queryKey: ["notifications", user.id] }),
+        (payload) => {
+          queryClient.invalidateQueries({ queryKey: ["notifications", user.id] });
+          if (payload.eventType === "INSERT") {
+            const row = payload.new as Notification;
+            if (!seen.current.has(row.id)) {
+              seen.current.add(row.id);
+              toast(row.title, { description: row.message });
+            }
+          }
+        },
       )
       .subscribe();
     return () => {
@@ -48,14 +61,27 @@ export function NotificationCenter() {
 
   const unread = notifications.filter((n) => !n.read).length;
 
-  async function toggleRead(item: Notification) {
-    await supabase.from("notifications").update({ read: !item.read }).eq("id", item.id);
+  function refresh() {
     queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
   }
 
+  async function setRead(item: Notification, read: boolean) {
+    await supabase.from("notifications").update({ read }).eq("id", item.id);
+    refresh();
+  }
+
   async function markAll() {
-    await supabase.from("notifications").update({ read: true }).eq("read", false);
-    queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
+    if (!user) return;
+    await supabase.from("notifications").update({ read: true }).eq("user_id", user.id).eq("read", false);
+    refresh();
+  }
+
+  async function openItem(item: Notification) {
+    if (!item.read) await setRead(item, true);
+    if (item.action_link) {
+      setOpen(false);
+      navigate({ to: item.action_link } as never);
+    }
   }
 
   return (
@@ -87,29 +113,38 @@ export function NotificationCenter() {
             {notifications.map((item) => (
               <li
                 key={item.id}
-                className={cn("flex gap-3 px-5 py-4 transition-colors", !item.read && "bg-primary/5")}
+                className={cn(
+                  "flex gap-3 px-5 py-4 transition-colors hover:bg-muted/50",
+                  item.read ? "opacity-60" : "bg-primary/10",
+                )}
               >
-                <Dot className={cn("mt-0.5 size-5 shrink-0", item.read ? "text-transparent" : "text-primary")} />
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium">{item.title}</p>
+                <span
+                  className={cn(
+                    "mt-1.5 size-2 shrink-0 rounded-full",
+                    item.read ? "bg-transparent" : "bg-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.2)]",
+                  )}
+                />
+                <button
+                  type="button"
+                  onClick={() => openItem(item)}
+                  className="min-w-0 flex-1 text-left"
+                >
+                  <p className={cn("text-sm", item.read ? "font-normal" : "font-semibold")}>{item.title}</p>
                   <p className="mt-0.5 text-sm text-muted-foreground">{item.message}</p>
                   <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
                     <span>{formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}</span>
-                    {item.action_link && (
-                      <Link to="/dashboard" onClick={() => setOpen(false)} className="text-primary hover:underline">
-                        View
-                      </Link>
-                    )}
+                    {item.action_link && <span className="text-primary">View</span>}
                   </div>
-                </div>
+                </button>
                 <Button
                   variant="ghost"
                   size="icon"
                   className="size-8 shrink-0"
                   aria-label={item.read ? "Mark unread" : "Mark read"}
-                  onClick={() => toggleRead(item)}
+                  title={item.read ? "Mark as unread" : "Mark as read"}
+                  onClick={() => setRead(item, !item.read)}
                 >
-                  <Check className={cn("size-4", item.read && "text-muted-foreground/50")} />
+                  {item.read ? <Undo2 className="size-4" /> : <Check className="size-4" />}
                 </Button>
               </li>
             ))}
