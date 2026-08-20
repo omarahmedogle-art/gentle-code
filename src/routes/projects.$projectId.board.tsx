@@ -218,7 +218,7 @@ function BoardPage() {
                         onClick={() => setOpenTask(task)}
                         title={!movable && editable ? "Only the assignee, admins or owners can move this task" : undefined}
                         className={cn(
-                          "rounded-lg border bg-card p-3 shadow-sm transition-shadow hover:shadow-lift",
+                          "rounded-lg border border-kanban-card-border bg-kanban-card p-3 shadow-md transition-shadow hover:shadow-lift",
                           movable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
                         )}
                       >
