@@ -293,7 +293,7 @@ function BoardPage() {
           })}
 
           {canEdit(role) && (
-            <div className="w-72 shrink-0 rounded-xl border border-dashed p-3">
+            <div className="w-72 shrink-0 rounded-xl border border-dashed border-kanban-column-border bg-kanban-column/60 p-3">
               <p className="px-1 pb-2 text-sm font-semibold text-muted-foreground">Add new column</p>
               <div className="flex gap-2">
                 <Input
