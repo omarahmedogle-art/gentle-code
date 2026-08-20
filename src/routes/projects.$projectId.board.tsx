@@ -172,7 +172,7 @@ function BoardPage() {
           </Select>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <div className="flex gap-4 overflow-x-auto rounded-2xl pb-4">
           {columns.map((column) => {
             const columnTasks = filtered.filter((t) => t.column_id === column.id);
             return (
@@ -183,7 +183,7 @@ function BoardPage() {
                   if (dragged && editable) moveTask(dragged, column.id);
                   setDragged(null);
                 }}
-                className="flex w-72 shrink-0 flex-col rounded-xl border bg-muted/30 p-3"
+                className="flex w-72 shrink-0 flex-col rounded-xl border border-kanban-column-border bg-kanban-column p-3 shadow-soft"
               >
                 <div className="flex items-center gap-2 px-1 pb-3">
                   <h2 className="text-sm font-semibold">{column.title}</h2>
@@ -218,7 +218,7 @@ function BoardPage() {
                         onClick={() => setOpenTask(task)}
                         title={!movable && editable ? "Only the assignee, admins or owners can move this task" : undefined}
                         className={cn(
-                          "rounded-lg border bg-card p-3 shadow-sm transition-shadow hover:shadow-lift",
+                          "rounded-lg border border-kanban-card-border bg-kanban-card p-3 shadow-md transition-shadow hover:shadow-lift",
                           movable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
                         )}
                       >
@@ -293,7 +293,7 @@ function BoardPage() {
           })}
 
           {canEdit(role) && (
-            <div className="w-72 shrink-0 rounded-xl border border-dashed p-3">
+            <div className="w-72 shrink-0 rounded-xl border border-dashed border-kanban-column-border bg-kanban-column/60 p-3">
               <p className="px-1 pb-2 text-sm font-semibold text-muted-foreground">Add new column</p>
               <div className="flex gap-2">
                 <Input
