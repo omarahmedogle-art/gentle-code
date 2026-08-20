@@ -314,7 +314,7 @@ function BoardPage() {
       <TaskDialog
         task={openTask}
         projectId={projectId}
-        editable={editable}
+        editable={openTask ? canMoveTask(role, openTask, user?.id) : false}
         onOpenChange={(open) => !open && setOpenTask(null)}
       />
     </>
