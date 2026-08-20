@@ -172,7 +172,7 @@ function BoardPage() {
           </Select>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <div className="flex gap-4 overflow-x-auto rounded-2xl pb-4">
           {columns.map((column) => {
             const columnTasks = filtered.filter((t) => t.column_id === column.id);
             return (
@@ -183,7 +183,7 @@ function BoardPage() {
                   if (dragged && editable) moveTask(dragged, column.id);
                   setDragged(null);
                 }}
-                className="flex w-72 shrink-0 flex-col rounded-xl border bg-muted/30 p-3"
+                className="flex w-72 shrink-0 flex-col rounded-xl border border-kanban-column-border bg-kanban-column p-3 shadow-soft"
               >
                 <div className="flex items-center gap-2 px-1 pb-3">
                   <h2 className="text-sm font-semibold">{column.title}</h2>
