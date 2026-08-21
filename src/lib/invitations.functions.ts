@@ -16,15 +16,24 @@ export type InvitationPreview = {
 
 const tokenSchema = z.object({ token: z.string().min(8).max(200) });
 
+type PrivateRpc = {
+  schema: (name: string) => {
+    rpc: (
+      fn: string,
+      args: Record<string, unknown>,
+    ) => Promise<{ data: unknown; error: { message: string } | null }>;
+  };
+};
+
 export const getInvitation = createServerFn({ method: "GET" })
   .inputValidator((data: unknown) => tokenSchema.parse(data))
   .handler(async ({ data }): Promise<InvitationPreview | null> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: rows, error } = await supabaseAdmin
+    const { data: rows, error } = await (supabaseAdmin as unknown as PrivateRpc)
       .schema("private")
       .rpc("get_invitation", { _token: data.token });
     if (error) throw new Error(error.message);
-    const list = (rows ?? []) as unknown as InvitationPreview[];
+    const list = (rows ?? []) as InvitationPreview[];
     return list[0] ?? null;
   });
 
@@ -34,7 +43,7 @@ export const acceptInvitation = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<string> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const email = (context.claims as { email?: string } | null)?.email ?? "";
-    const { data: projectId, error } = await supabaseAdmin
+    const { data: projectId, error } = await (supabaseAdmin as unknown as PrivateRpc)
       .schema("private")
       .rpc("accept_invitation", {
         _token: data.token,
@@ -42,5 +51,5 @@ export const acceptInvitation = createServerFn({ method: "POST" })
         _user_email: email,
       });
     if (error) throw new Error(error.message);
-    return projectId as unknown as string;
+    return projectId as string;
   });
