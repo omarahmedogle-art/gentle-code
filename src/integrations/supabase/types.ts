@@ -388,40 +388,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      accept_invitation: { Args: { _token: string }; Returns: string }
-      can_edit_project: {
-        Args: { _project_id: string; _user_id: string }
-        Returns: boolean
-      }
-      can_manage_project: {
-        Args: { _project_id: string; _user_id: string }
-        Returns: boolean
-      }
-      get_invitation: {
-        Args: { _token: string }
-        Returns: {
-          email: string
-          expires_at: string
-          id: string
-          inviter_name: string
-          project_id: string
-          project_name: string
-          role: Database["public"]["Enums"]["project_role"]
-          status: Database["public"]["Enums"]["invitation_status"]
-        }[]
-      }
-      is_project_member: {
-        Args: { _project_id: string; _user_id: string }
-        Returns: boolean
-      }
-      project_role_of: {
-        Args: { _project_id: string; _user_id: string }
-        Returns: Database["public"]["Enums"]["project_role"]
-      }
-      shares_project_with: {
-        Args: { _other: string; _user_id: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       invitation_status: "pending" | "accepted" | "revoked" | "expired"
