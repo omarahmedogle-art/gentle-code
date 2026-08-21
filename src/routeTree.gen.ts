@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AcceptInviteRouteImport } from './routes/accept-invite'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ProjectsProjectIdAnalyticsRouteImport } from './routes/projects.$projectId.analytics'
 import { Route as ProjectsProjectIdBoardRouteImport } from './routes/projects.$projectId.board'
 import { Route as ProjectsProjectIdSettingsRouteImport } from './routes/projects.$projectId.settings'
@@ -33,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -41,6 +48,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsProjectIdAnalyticsRoute =
@@ -65,8 +77,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accept-invite': typeof AcceptInviteRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
@@ -75,8 +89,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accept-invite': typeof AcceptInviteRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/dashboard': typeof DashboardRoute
   '/projects': typeof ProjectsIndexRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
@@ -86,8 +102,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/accept-invite': typeof AcceptInviteRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
@@ -98,8 +116,10 @@ export interface FileRouteTypes {
     | '/'
     | '/accept-invite'
     | '/auth'
+    | '/billing'
     | '/dashboard'
     | '/projects/'
+    | '/api/public/stripe-webhook'
     | '/projects/$projectId/analytics'
     | '/projects/$projectId/board'
     | '/projects/$projectId/settings'
@@ -108,8 +128,10 @@ export interface FileRouteTypes {
     | '/'
     | '/accept-invite'
     | '/auth'
+    | '/billing'
     | '/dashboard'
     | '/projects'
+    | '/api/public/stripe-webhook'
     | '/projects/$projectId/analytics'
     | '/projects/$projectId/board'
     | '/projects/$projectId/settings'
@@ -118,8 +140,10 @@ export interface FileRouteTypes {
     | '/'
     | '/accept-invite'
     | '/auth'
+    | '/billing'
     | '/dashboard'
     | '/projects/'
+    | '/api/public/stripe-webhook'
     | '/projects/$projectId/analytics'
     | '/projects/$projectId/board'
     | '/projects/$projectId/settings'
@@ -129,8 +153,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AcceptInviteRoute: typeof AcceptInviteRoute
   AuthRoute: typeof AuthRoute
+  BillingRoute: typeof BillingRoute
   DashboardRoute: typeof DashboardRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ProjectsProjectIdAnalyticsRoute: typeof ProjectsProjectIdAnalyticsRoute
   ProjectsProjectIdBoardRoute: typeof ProjectsProjectIdBoardRoute
   ProjectsProjectIdSettingsRoute: typeof ProjectsProjectIdSettingsRoute
@@ -159,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -171,6 +204,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects/'
       preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/$projectId/analytics': {
@@ -201,8 +241,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AcceptInviteRoute: AcceptInviteRoute,
   AuthRoute: AuthRoute,
+  BillingRoute: BillingRoute,
   DashboardRoute: DashboardRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ProjectsProjectIdAnalyticsRoute: ProjectsProjectIdAnalyticsRoute,
   ProjectsProjectIdBoardRoute: ProjectsProjectIdBoardRoute,
   ProjectsProjectIdSettingsRoute: ProjectsProjectIdSettingsRoute,
