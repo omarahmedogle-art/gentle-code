@@ -92,7 +92,7 @@ export function PlanCard({
   );
 }
 
-export function PricingPlans({ currentPlan }: { currentPlan?: string | null }) {
+export function PricingPlans({ currentPlan }: { currentPlan?: string | null | undefined }) {
   const { start, pending } = useStartCheckout();
   return (
     <div className="grid gap-6 sm:grid-cols-2">
