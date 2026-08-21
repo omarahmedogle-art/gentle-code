@@ -39,38 +39,27 @@ function AcceptInvitePage() {
   const queryClient = useQueryClient();
   const [busy, setBusy] = useState(false);
 
+  const fetchInvitation = useServerFn(getInvitation);
+  const acceptFn = useServerFn(acceptInvitation);
+
   const { data: invitation, isLoading } = useQuery({
     queryKey: ["invitation", token],
     enabled: !!token,
-    queryFn: async () => {
-      const { data, error } = await supabase.rpc("get_invitation", { _token: token! });
-      if (error) throw error;
-      return (data as unknown[])[0] as
-        | {
-            id: string;
-            project_id: string;
-            project_name: string;
-            email: string;
-            role: string;
-            status: string;
-            expires_at: string;
-            inviter_name: string;
-          }
-        | undefined;
-    },
+    queryFn: async () => (await fetchInvitation({ data: { token: token! } })) ?? undefined,
   });
 
   async function accept() {
     setBusy(true);
-    const { data, error } = await supabase.rpc("accept_invitation", { _token: token! });
-    setBusy(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      const projectId = await acceptFn({ data: { token: token! } });
+      toast.success("Welcome to the team!");
+      queryClient.invalidateQueries();
+      navigate({ to: "/projects/$projectId/board", params: { projectId } });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not accept this invitation");
+    } finally {
+      setBusy(false);
     }
-    toast.success("Welcome to the team!");
-    queryClient.invalidateQueries();
-    navigate({ to: "/projects/$projectId/board", params: { projectId: data as string } });
   }
 
   return (
