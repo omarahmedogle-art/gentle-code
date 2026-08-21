@@ -6,8 +6,9 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/lib/auth";
+import { acceptInvitation, getInvitation } from "@/lib/invitations.functions";
 
 type Search = { token?: string | undefined };
 
