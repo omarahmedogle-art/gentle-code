@@ -14,6 +14,7 @@ import { Route as AcceptInviteRouteImport } from './routes/accept-invite'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ProjectsProjectIdAnalyticsRouteImport } from './routes/projects.$projectId.analytics'
 import { Route as ProjectsProjectIdBoardRouteImport } from './routes/projects.$projectId.board'
 import { Route as ProjectsProjectIdSettingsRouteImport } from './routes/projects.$projectId.settings'
@@ -43,6 +44,11 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsProjectIdAnalyticsRoute =
   ProjectsProjectIdAnalyticsRouteImport.update({
     id: '/projects/$projectId/analytics',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects': typeof ProjectsIndexRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/projects/$projectId/analytics': typeof ProjectsProjectIdAnalyticsRoute
   '/projects/$projectId/board': typeof ProjectsProjectIdBoardRoute
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/projects/'
+    | '/api/public/stripe-webhook'
     | '/projects/$projectId/analytics'
     | '/projects/$projectId/board'
     | '/projects/$projectId/settings'
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/projects'
+    | '/api/public/stripe-webhook'
     | '/projects/$projectId/analytics'
     | '/projects/$projectId/board'
     | '/projects/$projectId/settings'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/projects/'
+    | '/api/public/stripe-webhook'
     | '/projects/$projectId/analytics'
     | '/projects/$projectId/board'
     | '/projects/$projectId/settings'
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ProjectsProjectIdAnalyticsRoute: typeof ProjectsProjectIdAnalyticsRoute
   ProjectsProjectIdBoardRoute: typeof ProjectsProjectIdBoardRoute
   ProjectsProjectIdSettingsRoute: typeof ProjectsProjectIdSettingsRoute
@@ -173,6 +186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/$projectId/analytics': {
       id: '/projects/$projectId/analytics'
       path: '/projects/$projectId/analytics'
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ProjectsProjectIdAnalyticsRoute: ProjectsProjectIdAnalyticsRoute,
   ProjectsProjectIdBoardRoute: ProjectsProjectIdBoardRoute,
   ProjectsProjectIdSettingsRoute: ProjectsProjectIdSettingsRoute,
