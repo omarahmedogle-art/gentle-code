@@ -49,9 +49,9 @@ export function PlanCard({
   pending,
 }: {
   plan: PlanDef;
-  currentPlan?: string | null;
+  currentPlan?: string | null | undefined;
   onSelect: (plan: "starter" | "pro") => void;
-  pending?: string | null;
+  pending?: string | null | undefined;
 }) {
   const isCurrent = currentPlan === plan.id;
   return (
@@ -114,7 +114,7 @@ export function UpgradeDialog({
   onOpenChange: (v: boolean) => void;
   title?: string;
   description?: string;
-  currentPlan?: string | null;
+  currentPlan?: string | null | undefined;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
